@@ -5,10 +5,10 @@
 ### sk.decorators.cache
 
 ```python
-import streambox as sk
+import streambox as sb
 
 
-@sk.decorators.cache
+@sb.decorators.cache
 def run_my_function(result, _check=False):
     print("Print from inside function only runs the first time")
     return result * 2
@@ -24,10 +24,10 @@ print("Result: ", result)
 sk.decorators.retry(max_tries=5, delay_seconds=None, incremental_delay=10)
 
 ```python
-import streambox as sk
+import streambox as sb
 
 
-@sk.decorators.retry(max_tries=5, delay_seconds=None)
+@sb.decorators.retry(max_tries=5, delay_seconds=None)
 def run_my_function(result):
     print("Function started")
     raise Exception("This is a custom error!")
@@ -43,11 +43,11 @@ timer(msg_template=None,
           logger=logger_default)
 
 ```python
-import streambox as sk
+import streambox as sb
 import time
 
 
-@sk.decorators.timer()
+@sb.decorators.timer()
 def run_my_function(result):
     print("Function started")
     time.sleep(2)
@@ -57,11 +57,11 @@ def run_my_function(result):
 ### sk.decorators.logger
 
 ```python
-import streambox as sk
+import streambox as sb
 import time
 
 
-@sk.decorators.logger
+@sb.decorators.logger
 def run_my_function(result):
     print("Function started")
     time.sleep(2)

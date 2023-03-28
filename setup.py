@@ -1,11 +1,20 @@
+import pathlib
+import pkg_resources
 import setuptools
+
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 with open('requirements.txt', "r") as f:
-    requirements = f.read().splitlines()
+    install_requires = f.read().splitlines()
 
+# with pathlib.Path('requirements.txt').open() as requirements_txt:
+#     install_requires = [
+#         str(requirement)
+#         for requirement
+#         in pkg_resources.parse_requirements(requirements_txt)
+#     ]
 
 setuptools.setup(
     name="streambox",
@@ -15,7 +24,7 @@ setuptools.setup(
     description="A package for generic data science utilities",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/kavehbc/streamkit",
+    url="https://github.com/kavehbc/streambox",
     packages=setuptools.find_packages(),
-    install_requires=requirements
+    install_requires=install_requires
 )

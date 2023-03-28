@@ -1,7 +1,7 @@
-import streambox as sk
+import streambox as sb
 
 
-@sk.decorators.retry(max_tries=5, delay_seconds=None)
+@sb.decorators.retry(max_tries=5, delay_seconds=None)
 def run_my_function(result):
     print("Function started")
     raise Exception("This is a custom error!")

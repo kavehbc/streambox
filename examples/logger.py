@@ -1,8 +1,8 @@
-import streambox as sk
+import streambox as sb
 import time
 
 
-@sk.decorators.logger
+@sb.decorators.logger
 def run_my_function(result):
     print("Function started")
     time.sleep(2)

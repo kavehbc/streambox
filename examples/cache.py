@@ -1,7 +1,7 @@
-import streambox as sk
+import streambox as sb
 
 
-@sk.decorators.cache
+@sb.decorators.cache
 def run_my_function(result, _check=False):
     print("Print from inside function only runs the first time")
     return result
