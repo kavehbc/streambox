@@ -1,4 +1,4 @@
-# Streamkit - Data Science Toolkit
+# Streambox - Data Science Toolkit
 
 Streamkit is a toolkit with a number of functions and decorators useful for data scientist and developers in their projects.
 
@@ -17,7 +17,7 @@ pip install -e . --upgrade --upgrade-strategy only-if-needed
 ### PyPIP Installation
 
 ```bash
-pip install streamkit
+pip install streambox
 ```
 
 ## Changelog
