@@ -68,16 +68,16 @@ This decorator retry function in case of failure.
 
 ##### Parameters
 
-- **max_tries** (int) (default: 5)
+- **max_tries** (int) (default: `5`)
 
   This the maximum number of tries. The default value is 5.
 
-- **delay_seconds** (int) (default: None)
+- **delay_seconds** (int) (default: `None`)
 
   This is delay/wait in seconds between each try. If not provided, the default value is None,
 and it checks `incremental_delay`.
 
-- **incremental_delay** (int) (default: 10)
+- **incremental_delay** (int) (default: `10`)
 
   This is a factor in delay between each try if `delay_seconds` is `None`.
 The default value is 10 seconds. It means that if the function fails, the next try happens in 10 seconds.
@@ -108,7 +108,26 @@ This decorator calculate and log the execution time of a function.
 
 ##### Parameters
 
-< TO BE COMPLETED >
+- **msg_template** (string) (default: `None`)
+
+  This is logging message template.
+
+- **level** (logger) (default: `logging.INFO`)
+
+  This is the level of logging. The default value is `logging.INFO`.
+
+- **prefix** (string) (default: `None`)
+
+  This is logging prefix message template.
+
+- **suffix** (string) (default: `None`)
+
+  This is logging suffix message template.
+
+- **logger** (default: `logging.getLogger(__name__)`)
+
+  This logger is being used to log messages.
+
 
 ##### Example
 
@@ -191,6 +210,7 @@ Here's an example of using the send_email function to send an email:
 ```python
 import streambox as sb
 
+
 sender_email = 'sender@example.com'
 receiver_email = 'receiver@example.com'
 subject = 'Test email'
@@ -223,6 +243,7 @@ This returns the active session ID of the current user.
 ```python
 import streambox as sb
 
+
 session_id = sb.session.get_session_id()
 print(session_id)
 ```
@@ -237,6 +258,7 @@ This returns the current user information (such as email address), if the user i
 ```python
 import streambox as sb
 
+
 user_info = sb.session.get_user_info()
 print(user_info)
 ```
@@ -250,6 +272,7 @@ This returns a list of all active session IDs.
 ##### Example
 ```python
 import streambox as sb
+
 
 sessions = sb.session.get_all_sessions()
 print(sessions)
@@ -267,6 +290,7 @@ This function injects a CSS to hide footer in Streamlit.
 import streamlit as st
 import streambox as sb
 
+
 sb.style.hide_footer()
 ```
 
@@ -280,6 +304,7 @@ This function injects a CSS to hide hamburger menu in Streamlit.
 ```python
 import streamlit as st
 import streambox as sb
+
 
 sb.style.hide_hamburger_menu()
 ```
@@ -296,6 +321,7 @@ In order to use this, the first element of the radio button should be an arbitra
 ```python
 import streamlit as st
 import streambox as sb
+
 
 options = ["-", "Item 1", "Item 2"]
 item = st.radio("Radio", options=options)
