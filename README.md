@@ -5,7 +5,7 @@ Streambox is a toolbox with a number of functions and decorators useful for data
 ## Installation
 
 You can install this package either by forking this repo and install it locally,
-or by installing it from PyPIP repo.
+or by installing it directly from PyPip.
 
 ### PyPip Installation
 
@@ -21,18 +21,19 @@ pip install -e . --upgrade --upgrade-strategy only-if-needed
 ```
 ___
 
-## Documentations
+# Documentation
 
-Streambox contains two main namespaces:
+Streambox contains the following main namespaces:
 
-- **decorators**: This contains some practical decorators
-- **streamlit**: This contains functions and hacks for Streamlit
+- **decorators**: practical decorators
+- **tools**: practical functions
+- **streamlit**: functions and hacks for Streamlit
 
-### Decorators
+## Decorators
 
-#### streambox.decorators.cache
+### streambox.decorators.cache
 
-> streambox.decorators.cache
+> **streambox.decorators.cache**(expiry=datetime.timedelta(minutes=30), persistent=False, ttl=None, no_cache=None, show_log=False)
 
 This decorator cache the result of a function based on the input arguments.
 When the function is executed the first time, the result is being cached,
@@ -44,29 +45,47 @@ By default, all parameters to a cached function must be hashable.
 Any parameter whose name begins with _ will not be hashed.
 You can use this as an "escape hatch" for parameters that are not hashable
 
-##### Example
+#### Example
 
 ```python
 import streambox as sb
+import logging
+import datetime
 
+logging.basicConfig(level=logging.INFO)
 
-@sb.decorators.cache
-def run_my_function(result, _check=False):
-    print("Print from inside function only runs the first time")
-    return result * 2
-
-
-result = run_my_function(5, _check=True)
-print("Result: ", result)
+@sb.decorators.cache(expiry=datetime.timedelta(seconds=30), persistent=True, ttl=5, show_log=True)
+def my_function(arg1, arg2, **kwargs):
+    # your function code here
+    if some_condition:
+        return no_cache
+    else:
+        if some_other_condition:
+            return result1, result2, no_cache
+        else:
+            return result1, result2
 ```
 
-#### streambox.decorators.retry
+```python
+import streambox as sb
+import datetime
 
-> streambox.decorators.retry(max_tries=5, delay_seconds=None, incremental_delay=10)
+@sb.decorators.cache(expiry=datetime.timedelta(minutes=1), persistent=True, ttl=5)
+def foo(x):
+    return x + 1
+
+@sb.decorators.cache(expiry=datetime.timedelta(minutes=1), persistent=False, ttl=5)
+def bar(x, y):
+    return x * y
+```
+
+### streambox.decorators.retry
+
+> **streambox.decorators.retry**(max_tries=5, delay_seconds=None, incremental_delay=10)
 
 This decorator retry function in case of failure.
 
-##### Parameters
+#### Parameters
 
 - **max_tries** (int) (default: `5`)
 
@@ -83,7 +102,7 @@ and it checks `incremental_delay`.
 The default value is 10 seconds. It means that if the function fails, the next try happens in 10 seconds.
 If it fails again, it adds another 10 seconds to the previous delay, which makes it 20 seconds.
 
-##### Example
+#### Example
 
 ```python
 import streambox as sb
@@ -96,80 +115,39 @@ def run_my_function(result):
     return result
 ```
 
-#### streambox.decorators.timer
+### streambox.decorators.logger
 
-> streambox.decorators.timer(msg_template=None,
-          level=logging.INFO,
-          prefix=None,
-          suffix=None,
-          logger=logger_default)
+> **streambox.decorators.logger**(timer=False)
 
-This decorator calculate and log the execution time of a function.
+This decorator logs the beginning and the end of function execution with the execution time.
 
-##### Parameters
+#### Parameters
 
-- **msg_template** (string) (default: `None`)
+- **timer** (boolean) (default: `False`)
 
-  This is logging message template.
+  If `timer` is set to `True`, it will show the execution time of the function.
 
-- **level** (logger) (default: `logging.INFO`)
-
-  This is the level of logging. The default value is `logging.INFO`.
-
-- **prefix** (string) (default: `None`)
-
-  This is logging prefix message template.
-
-- **suffix** (string) (default: `None`)
-
-  This is logging suffix message template.
-
-- **logger** (default: `logging.getLogger(__name__)`)
-
-  This logger is being used to log messages.
-
-
-##### Example
+#### Example
 
 ```python
 import streambox as sb
 import time
 
 
-@sb.decorators.timer()
+@sb.decorators.logger(timer=True)
 def run_my_function(result):
     print("Function started")
     time.sleep(2)
     return result
 ```
 
-#### streambox.decorators.logger
+### streambox.decorators.email_on_failure
 
-> streambox.decorators.logger
-
-This decorator logs the beginning and the end of function execution.
-
-##### Example
-
-```python
-import streambox as sb
-import time
-
-
-@sb.decorators.logger
-def run_my_function(result):
-    print("Function started")
-    time.sleep(2)
-    return result
-```
-
-#### streambox.decorators.email_on_failure
-
-> streambox.decorators.email_on_failure(from_email, to_email, smtp_server, smtp_port, username, password)
+> **streambox.decorators.email_on_failure**(from_email, to_email, smtp_server, smtp_port, username, password)
 
 This decorator sends an email using SMTP settings if there is a failure inside a function.
 
-##### Parameters
+#### Parameters
 
 - **sender_email** (string)
 
@@ -204,7 +182,7 @@ This decorator sends an email using SMTP settings if there is a failure inside a
   The password to authenticate with the SMTP server.
 
 
-##### Example
+#### Example
 Here's an example of using the send_email function to send an email:
 
 ```python
@@ -230,16 +208,25 @@ def sample_function():
 ```
 
 ___
-### Streamlit
+## Tools
 
-#### Session
-#### streambox.session.get_session_id
+### streambox.tools.flush_cache
 
-> streambox.session.get_session_id()
+> **streambox.tools.flush_cache**()
+
+This decorator flush the persistent cache data files in the package.
+
+___
+## Streamlit
+
+### Session
+### streambox.session.get_session_id
+
+> **streambox.session.get_session_id**()
 
 This returns the active session ID of the current user.
 
-##### Example
+#### Example
 ```python
 import streambox as sb
 
@@ -248,13 +235,13 @@ session_id = sb.session.get_session_id()
 print(session_id)
 ```
 
-#### streambox.session.get_user_info
+### streambox.session.get_user_info
 
-> streambox.session.get_user_info()
+> **streambox.session.get_user_info**()
 
 This returns the current user information (such as email address), if the user is accessed via Streamlit Cloud.
 
-##### Example
+#### Example
 ```python
 import streambox as sb
 
@@ -263,13 +250,13 @@ user_info = sb.session.get_user_info()
 print(user_info)
 ```
 
-#### streambox.session.get_all_sessions
+### streambox.session.get_all_sessions
 
-> streambox.session.get_all_sessions()
+> **streambox.session.get_all_sessions**()
 
 This returns a list of all active session IDs.
 
-##### Example
+#### Example
 ```python
 import streambox as sb
 
@@ -278,14 +265,14 @@ sessions = sb.session.get_all_sessions()
 print(sessions)
 ```
 
-#### Style
-#### streambox.style.hide_footer
+### Style
+### streambox.style.hide_footer
 
-> streambox.style.hide_footer()
+> **streambox.style.hide_footer**()
 
 This function injects a CSS to hide footer in Streamlit.
 
-##### Example
+#### Example
 ```python
 import streamlit as st
 import streambox as sb
@@ -294,13 +281,13 @@ import streambox as sb
 sb.style.hide_footer()
 ```
 
-#### streambox.style.hide_hamburger_menu
+### streambox.style.hide_hamburger_menu
 
-> streambox.style.hide_hamburger_menu()
+> **streambox.style.hide_hamburger_menu**()
 
 This function injects a CSS to hide hamburger menu in Streamlit.
 
-##### Example
+#### Example
 ```python
 import streamlit as st
 import streambox as sb
@@ -309,15 +296,15 @@ import streambox as sb
 sb.style.hide_hamburger_menu()
 ```
 
-#### streambox.style.hide_default_radio_selection
+### streambox.style.hide_default_radio_selection
 
-> streambox.style.hide_default_radio_selection()
+> **streambox.style.hide_default_radio_selection**()
 
 This function injects a CSS to hide the first item in `st.radio` in Streamlit.
 This would allow developers to have radio buttons without default value.
 In order to use this, the first element of the radio button should be an arbitrary item. 
 
-##### Example
+#### Example
 ```python
 import streamlit as st
 import streambox as sb
@@ -329,6 +316,16 @@ item = st.radio("Radio", options=options)
 # this function hides the first radio option which is selected by default
 sb.style.hide_default_radio_selection()
 ```
+
+___
+## GitHub Repo
+This project is open-source, and it is available on GitHub at [https://github.com/kavehbc/streambox](https://github.com/kavehbc/streambox).
+
+## Developer(s)
+- Kaveh Bakhtiyari - [Website](https://bakhtiyari.com) | [Medium](https://medium.com/@bakhtiyari)
+  | [LinkedIn](https://www.linkedin.com/in/bakhtiyari) | [GitHub](https://github.com/kavehbc)
+
+- ChatGPT, OpenAI - [Website](https://openai.com)
 
 ___
 ## Changelog

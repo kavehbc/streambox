@@ -1,13 +1,19 @@
 import logging
-import functools
+import time
+
+logging.basicConfig(level=logging.INFO)
 
 
-def logger(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        logging.info(f"Executing {func.__name__}")
-        result = func(*args, **kwargs)
-        logging.info(f"Finished executing {func.__name__}")
-        return result
-    return wrapper
-
+def logger(timer=False):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            logging.info(f'Started executing {func.__name__}')
+            start_time = time.time()
+            result = func(*args, **kwargs)
+            end_time = time.time()
+            logging.info(f'Finished executing {func.__name__}')
+            if timer:
+                logging.info(f'Execution time: {end_time - start_time} seconds')
+            return result
+        return wrapper
+    return decorator
