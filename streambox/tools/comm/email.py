@@ -6,7 +6,7 @@ from email.mime.application import MIMEApplication
 
 def send_email(sender_email, receiver_email, cc=None, bcc=None, subject='', message='', attachments=None,
                smtp_server='', smtp_port: int = 587, smtp_username='', smtp_password='', plain_text=True, priority=3):
-    """Send an email using SMTP.
+    """Send an email using Simple Mail Transfer Protocol (SMTP)
 
     Parameters:
     sender_email (str): The email address of the sender.
